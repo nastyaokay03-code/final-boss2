@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Битва за Остров Чувств: Финал с Лордом Безразличием</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    user-select: none;
+  }
+
+  /* ===== ЗАСТАВКА ===== */
+  #intro {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #2d2d44 0%, #1a1a2e 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    text-align: center;
+  }
+
+  #intro h1 {
+    font-size: clamp(28px, 5vw, 56px);
+    background: linear-gradient(90deg, #ffd700, #ff6b6b, #4ecdc4, #95e1d3);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    text-shadow: 0 0 30px rgba(255,215,0,0.3);
+  }
+
+  #intro p {
+    font-size: clamp(16px, 2vw, 22px);
+    max-width: 700px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    color: #e0e0e0;
+  }
+
+  .btn-start {
+    padding: 20px 50px;
+    font-size: 24px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    border: none;
+    border-radius: 50px;
+    color: #1a1a2e;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(255,215,0,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-start:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(255,215,0,0.7);
+  }
+
+  /* ===== ИГРОВОЕ ПОЛЕ ===== */
+  #game {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+  }
+
+  .sky {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, #2a2a4a 0%, #0f0f1e 100%);
+  }
+
+  /* Туман */
+  .fog {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 30% 40%, rgba(120,120,140,0.4) 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(100,100,120,0.3) 0%, transparent 50%);
+    animation: fogMove 15s ease-in-out infinite;
+  }
+
+  @keyframes fogMove {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ===== ЛОРД БЕЗРАЗЛИЧИЕ ===== */
+  #lord {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    height: 320px;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.3s;
+  }
+
+  .lord-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .lord-cloak {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    height: 260px;
+    background: linear-gradient(180deg, #4a4a5e 0%, #2a2a3e 50%, #1a1a2e 100%);
+    border-radius: 50% 50% 40% 40% / 30% 30% 70% 70%;
+    box-shadow: 
+      0 0 40px rgba(100,100,120,0.6),
+      inset 0 -20px 40px rgba(0,0,0,0.5);
+    animation: cloakFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes cloakFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+  }
+
+  .lord-head {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at 40% 40%, #6a6a7e, #3a3a4e);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(100,100,120,0.5);
+  }
+
+  .lord-eyes {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 25px;
+  }
+
+  .lord-eye {
+    width: 18px;
+    height: 18px;
+    background: #ff3366;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #ff3366;
+    animation: eyeGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes eyeGlow {
+    0%, 100% { opacity: 1; box-shadow: 0 0 15px #ff3366; }
+    50% { opacity: 0.6; box-shadow: 0 0 25px #ff3366; }
+  }
+
+  .lord-mouth {
+    position: absolute;
+    top: 85px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: #1a1a2e;
+    border-radius: 2px;
+  }
+
+  .lord-hands {
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+  }
+
+  .lord-hand {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: #3a3a4e;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(100,100,120,0.5);
+  }
+
+  .lord-hand.left { left: 20px; }
+  .lord-hand.right { right: 20px; }
+
+  .lord-name {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    font-weight: bold;
+    color: #888;
+    text-shadow: 0 0 10px rgba(100,100,120,0.5);
+    white-space: nowrap;
+  }
+
+  /* ===== СНАРЯДЫ ===== */
+  .projectile {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle at 30% 30%, #888, #444);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(100,100,120,0.8), inset -10px -10px 20px rgba(0,0,0,0.5);
+    cursor: pointer;
+    z-index: 20;
+    animation: flyProjectile 4s linear;
+  }
+
+  @keyframes flyProjectile {
+    0% {
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    100% {
+      top: 70%;
+      left: 20%;
+      transform: translate(-50%, -50%) scale(1.2);
+      opacity: 1;
+    }
+  }
+
+  .projectile.frozen {
+    animation-play-state: paused;
+    box-shadow: 0 0 40px rgba(255,255,255,0.8);
+  }
+
+  /* ===== РАДУЖНЫЙ ЩИТ ===== */
+  #shield-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #shield-label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255,215,0,0.5);
+  }
+
+  #shield {
+    width: 300px;
+    height: 180px;
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+    transition: filter 0.5s;
+  }
+
+  .shield-segment {
+    transition: all 0.5s;
+    opacity: 0.2;
+  }
+
+  .shield-segment.active {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+
+  /* ===== МОДАЛЬНОЕ ОКНО ===== */
+  #modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+
+  #modal.show {
+    display: flex;
+    animation: fadeIn 0.3s;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal-content {
+    background: linear-gradient(135deg, #2d2d44, #1a1a2e);
+    border: 3px solid #ffd700;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 0 50px rgba(255,215,0,0.3);
+    animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes modalPop {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .modal-content h2 {
+    font-size: 24px;
+    color: #ffd700;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .choice-group {
+    margin-bottom: 20px;
+  }
+
+  .choice-group label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #e0e0e0;
+  }
+
+  .choices {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .choice-btn {
+    padding: 12px 8px;
+    font-size: 14px;
+    font-weight: bold;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .choice-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+  }
+
+  .choice-btn.selected {
+    border-color: #ffd700;
+    background: rgba(255,215,0,0.2);
+    box-shadow: 0 0 15px rgba(255,215,0,0.4);
+  }
+
+  .btn-attack {
+    width: 100%;
+    padding: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #ff6b6b, #ff3366);
+    border: none;
+    border-radius: 15px;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+
+  .btn-attack:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .btn-attack:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255,51,102,0.5);
+  }
+
+  /* ===== СООБЩЕНИЯ ===== */
+  #message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.9);
+    border: 2px solid #ffd700;
+    border-radius: 15px;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    z-index: 200;
+    display: none;
+    text-align: center;
+    max-width: 90%;
+    box-shadow: 0 0 30px rgba(255,215,0,0.5);
+  }
+
+  #message.show {
+    display: block;
+    animation: messagePop 0.4s;
+  }
+
+  @keyframes messagePop {
+    from { transform: translateX(-50%) translateY(-50px); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+  }
+
+  #message.success { border-color: #4ecdc4; box-shadow: 0 0 30px rgba(78,205,196,0.5); }
+  #message.error { border-color: #ff3366; box-shadow: 0 0 30px rgba(255,51,102,0.5); }
+
+  /* ===== ТРЯСКА ЭКРАНА ===== */
+  .shake {
+    animation: shake 0.5s;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+  }
+
+  /* ===== ЛУЧ АТАКИ ===== */
+  .beam {
+    position: absolute;
+    width: 8px;
+    height: 0;
+    background: linear-gradient(180deg, currentColor, transparent);
+    transform-origin: top;
+    z-index: 15;
+    animation: beamShoot 0.8s forwards;
+  }
+
+  @keyframes beamShoot {
+    0% { height: 0; opacity: 1; }
+    50% { height: 400px; opacity: 1; }
+    100% { height: 400px; opacity: 0; }
+  }
+
+  /* ===== ЭКРАН ПОБЕДЫ ===== */
+  #victory {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, #ffd700 0%, #ff8c00 50%, #ff3366 100%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 500;
+    padding: 20px;
+    text-align: center;
+  }
+
+  #victory.show {
+    display: flex;
+    animation: victoryFade 1s;
+  }
+
+  @keyframes victoryFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  #victory h1 {
+    font-size: clamp(32px, 6vw, 64px);
+    color: #fff;
+    text-shadow: 0 0 30px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+  }
+
+  #victory p {
+    font-size: clamp(18px, 2.5vw, 24px);
+    color: #fff;
+    margin-bottom: 30px;
+    max-width: 600px;
+  }
+
+  .achievement {
+    background: linear-gradient(135deg, #fff, #ffd700);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    margin-bottom: 30px;
+  }
+
+  .achievement-icon {
+    font-size: 80px;
+    margin-bottom: 15px;
+  }
+
+  .achievement-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a1a2e;
+    margin-bottom: 10px;
+  }
+
+  .achievement-text {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  .btn-restart {
+    padding: 15px 40px;
+    font-size: 20px;
+    font-weight: bold;
+    background: #fff;
+    border: none;
+    border-radius: 50px;
+    color: #1a1a2e;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+  }
+
+  .btn-restart:hover {
+    transform: scale(1.05);
+  }
+
+  /* ===== ПОДСКАЗКА ===== */
+  #hint {
+    position: fixed;
+    bottom: 220px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(78,205,196,0.95);
+    border-radius: 15px;
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #1a1a2e;
+    font-weight: bold;
+    z-index: 150;
+    display: none;
+    max-width: 90%;
+    text-align: center;
+  }
+
+  #hint.show {
+    display: block;
+    animation: hintPop 0.3s;
+  }
+
+  @keyframes hintPop {
+    from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+  }
+
+  /* ===== СЧЁТЧИК ===== */
+  #counter {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.7);
+    border: 2px solid #ffd700;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffd700;
+    z-index: 50;
+  }
+
+  /* ===== АДАПТИВ ===== */
+  @media (max-width: 600px) {
+    #lord { width: 200px; height: 240px; }
+    .lord-cloak { width: 180px; height: 200px; }
+    .lord-head { width: 90px; height: 90px; }
+    .lord-eyes { top: 35px; gap: 18px; }
+    .lord-eye { width: 14px; height: 14px; }
+    .lord-mouth { top: 65px; }
+    #shield { width: 220px; height: 130px; }
+    .choices { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ЗАСТАВКА -->
+<div id="intro">
+  <h1>⚔️ Битва за Остров Чувств ⚔️</h1>
+  <p>Лорд Безразличие хочет накрыть остров Серым Туманом! Собери 6 базовых эмоций и их суперсилы, заряди Радужный Щит и победи босса!</p>
+  <button class="btn-start" onclick="startGame()"> НАЧАТЬ БИТВУ</button>
+</div>
+
+<!-- ИГРОВОЕ ПОЛЕ -->
+<div id="game">
+  <div class="sky"></div>
+  <div class="fog"></div>
+
+  <!-- ЛОРД -->
+  <div id="lord" onclick="lordClick()">
+    <div class="lord-body">
+      <div class="lord-cloak"></div>
+      <div class="lord-head">
+        <div class="lord-eyes">
+          <div class="lord-eye"></div>
+          <div class="lord-eye"></div>
+        </div>
+        <div class="lord-mouth"></div>
+      </div>
+      <div class="lord-hands">
+        <div class="lord-hand left"></div>
+        <div class="lord-hand right"></div>
+      </div>
+    </div>
+    <div class="lord-name">ЛОРД БЕЗРАЗЛИЧИЕ</div>
+  </div>
+
+  <!-- СЧЁТЧИК -->
+  <div id="counter">⚡ <span id="score">0</span> / 6</div>
+
+  <!-- ЩИТ -->
+  <div id="shield-container">
+    <div id="shield-label">🛡️ РАДУЖНЫЙ ЩИТ</div>
+    <svg id="shield" viewBox="0 0 300 180">
+      <!-- 6 секторов щита -->
+      <path class="shield-segment" data-idx="0" d="M 150 10 L 200 40 L 200 90 L 150 120 Z" fill="#ffd700" stroke="#fff" stroke-width="2"/>
+      <path class="shield-segment" data-idx="1" d="M 150 10 L 100 40 L 100 90 L 150 120 Z" fill="#ff6b6b" stroke="#fff" stroke-width="2"/>
+      <path class="shield-segment" data-idx="2" d="M 100 40 L 50 70 L 50 120 L 100 150 L 100 90 Z" fill="#4ecdc4" stroke="#fff" stroke-width="2"/>
+      <path class="shield-segment" data-idx="3" d="M 200 40 L 250 70 L 250 120 L 200 150 L 200 90 Z" fill="#95e1d3" stroke="#fff" stroke-width="2"/>
+      <path class="shield-segment" data-idx="4" d="M 100 150 L 150 180 L 150 120 L 100 90 Z" fill="#a8e6cf" stroke="#fff" stroke-width="2"/>
+      <path class="shield-segment" data-idx="5" d="M 200 150 L 150 180 L 150 120 L 200 90 Z" fill="#ff8c94" stroke="#fff" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <!-- ПОДСКАЗКА -->
+  <div id="hint"></div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО -->
+<div id="modal">
+  <div class="modal-content">
+    <h2>⚡ Перехвачен Снаряд Тумана!</h2>
+    <p style="text-align:center; margin-bottom:20px; color:#e0e0e0;">Выбери эмоцию и её суперсилу:</p>
+    
+    <div class="choice-group">
+      <label>🎭 ЭМОЦИЯ:</label>
+      <div class="choices" id="emotion-choices"></div>
+    </div>
+
+    <div class="choice-group">
+      <label>💪 СУПЕРСИЛА:</label>
+      <div class="choices" id="power-choices"></div>
+    </div>
+
+    <button class="btn-attack" id="attack-btn" disabled onclick="attack()">⚔️ АТАКОВАТЬ!</button>
+  </div>
+</div>
+
+<!-- СООБЩЕНИЕ -->
+<div id="message"></div>
+
+<!-- ЭКРАН ПОБЕДЫ -->
+<div id="victory">
+  <h1>🏆 ПОБЕДА! 🏆</h1>
+  <p>Ты доказал, что все эмоции важны! Серый Туман развеян, и Остров Чувств снова сияет!</p>
+  <div class="achievement">
+    <div class="achievement-icon" id="ach-icon"></div>
+    <div class="achievement-title" id="ach-title">Мастер Эмпатии</div>
+    <div class="achievement-text" id="ach-text">Ты отлично чувствуешь то, что переживают другие!</div>
+  </div>
+  <button class="btn-restart" onclick="location.reload()">🔄 Пройти ещё раз</button>
+</div>
+
+<script>
+// ===== ДАННЫЕ ИГРЫ =====
+const emotions = [
+  { name: 'Радость', icon: '😊', color: '#ffd700' },
+  { name: 'Удивление', icon: '😲', color: '#95e1d3' },
+  { name: 'Грусть', icon: '😢', color: '#4a90e2' },
+  { name: 'Злость', icon: '😠', color: '#ff6b6b' },
+  { name: 'Страх', icon: '😨', color: '#a855f7' },
+  { name: 'Отвращение', icon: '🤢', color: '#4ecdc4' }
+];
+
+const powers = [
+  { name: 'Батарейка', desc: 'Даёт энергию', icon: '' },
+  { name: 'Лупа', desc: 'Помогает узнавать новое', icon: '🔍' },
+  { name: 'Сигнал', desc: 'Показывает, что нужна помощь', icon: '' },
+  { name: 'Меч', desc: 'Защищает границы', icon: '⚔️' },
+  { name: 'Щит', desc: 'Оберегает от опасности', icon: '🛡️' },
+  { name: 'Фильтр', desc: 'Защищает от яда', icon: '' }
+];
+
+// Правильные пары: эмоция -> суперсила (по индексу)
+const correctPairs = {
+  'Радость': 'Батарейка',
+  'Удивление': 'Лупа',
+  'Грусть': 'Сигнал',
+  'Злость': 'Меч',
+  'Страх': 'Щит',
+  'Отвращение': 'Фильтр'
+};
+
+const achievements = [
+  { icon: '', title: 'Мастер Эмпатии', text: 'У тебя отлично получается чувствовать то, что переживают другие. Ты умеешь быть хорошим другом!' },
+  { icon: '🔍', title: 'Исследователь Себя', text: 'Ты прекрасно понимаешь свои собственные чувства и знаешь, что у тебя внутри. Это редкий и ценный дар!' },
+  { icon: '️', title: 'Хранитель Границ', text: 'Ты умеешь уважать себя и свои границы. Твоё "нет" звучит уверенно и справедливо!' },
+  { icon: '💪', title: 'Смелое Сердце', text: 'Ты не боишься своих сложных эмоций и умеешь с ними справляться. Ты настоящий смельчак!' },
+  { icon: '☀️', title: 'Генератор Радости', text: 'Рядом с тобой тепло и светло. Ты умеешь делиться позитивом и заряжать других!' },
+  { icon: '👁️', title: 'Внимательный Наблюдатель', text: 'Ты замечаешь то, что скрыто от других. Твоя внимательность к деталям и людям — твоя суперсила!' },
+  { icon: '🤝', title: 'Друг в Беде', text: 'На тебя можно положиться. Ты знаешь, как поддержать, когда кому-то грустно или тяжело.' },
+  { icon: '', title: 'Мудрый Советчик', text: 'Ты умеешь смотреть на ситуации с разных сторон и принимать взвешенные решения. К тебе хочется прислушаться!' }
+];
+
+// ===== СОСТОЯНИЕ ИГРЫ =====
+let score = 0;
+let usedEmotions = new Set();
+let currentProjectile = null;
+let selectedEmotion = null;
+let selectedPower = null;
+let projectileInterval = null;
+
+// ===== ЗАПУСК ИГРЫ =====
+function startGame() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('game').style.display = 'block';
+  showMessage('⚔️ Битва начинается! Лови снаряды Лорда!', 'info', 3000);
+  startProjectiles();
+}
+
+// ===== СНАРЯДЫ =====
+function startProjectiles() {
+  projectileInterval = setInterval(() => {
+    if (currentProjectile) return; // Уже есть активный снаряд
+    if (score >= 6) return;
+    spawnProjectile();
+  }, 5000);
+  
+  // Первый снаряд сразу
+  setTimeout(spawnProjectile, 1000);
+}
+
+function spawnProjectile() {
+  const projectile = document.createElement('div');
+  projectile.className = 'projectile';
+  
+  // Случайная траектория
+  const targetX = 10 + Math.random() * 30;
+  projectile.style.setProperty('--target-x', targetX + '%');
+  
+  // Анимация с переменным направлением
+  const duration = 3 + Math.random() * 2;
+  projectile.style.animation = `flyProjectile ${duration}s linear forwards`;
+  projectile.style.animationName = 'none';
+  
+  // Кастомная анимация через JS для разнообразия
+  const startX = 50;
+  const startY = 30;
+  const endX = targetX;
+  const endY = 70;
+  const startTime = Date.now();
+  
+  function animateProjectile() {
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(elapsed / (duration * 1000), 1);
+    
+    const x = startX + (endX - startX) * progress;
+    const y = startY + (endY - startY) * progress + Math.sin(progress * Math.PI) * 10;
+    const scale = 0.5 + progress * 0.7;
+    
+    projectile.style.left = x + '%';
+    projectile.style.top = y + '%';
+    projectile.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    projectile.style.opacity = progress < 0.1 ? progress * 10 : 1;
+    
+    if (progress < 1 && !projectile.classList.contains('frozen')) {
+      requestAnimationFrame(animateProjectile);
+    } else if (progress >= 1 && !projectile.classList.contains('frozen')) {
+      // Снаряд пролетел мимо — убираем
+      projectile.remove();
+      currentProjectile = null;
+      showMessage(' Снаряд пролетел мимо! Лорд смеётся!', 'error', 2000);
+    }
+  }
+  
+  requestAnimationFrame(animateProjectile);
+  
+  projectile.onclick = (e) => {
+    e.stopPropagation();
+    freezeProjectile(projectile);
+  };
+  
+  document.getElementById('game').appendChild(projectile);
+  currentProjectile = projectile;
+}
+
+function freezeProjectile(projectile) {
+  projectile.classList.add('frozen');
+  openModal();
+}
+
+// ===== МОДАЛЬНОЕ ОКНО =====
+function openModal() {
+  selectedEmotion = null;
+  selectedPower = null;
+  document.getElementById('attack-btn').disabled = true;
+  
+  // Заполняем эмоции (только неиспользованные)
+  const emotionContainer = document.getElementById('emotion-choices');
+  emotionContainer.innerHTML = '';
+  emotions.filter(e => !usedEmotions.has(e.name)).forEach(emotion => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `${emotion.icon}<br>${emotion.name}`;
+    btn.onclick = () => selectEmotion(btn, emotion.name);
+    emotionContainer.appendChild(btn);
+  });
+  
+  // Заполняем суперсилы
+  const powerContainer = document.getElementById('power-choices');
+  powerContainer.innerHTML = '';
+  powers.forEach(power => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `${power.icon}<br>${power.name}`;
+    btn.onclick = () => selectPower(btn, power.name);
+    powerContainer.appendChild(btn);
+  });
+  
+  document.getElementById('modal').classList.add('show');
+}
+
+function selectEmotion(btn, name) {
+  document.querySelectorAll('#emotion-choices .choice-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedEmotion = name;
+  checkReady();
+}
+
+function selectPower(btn, name) {
+  document.querySelectorAll('#power-choices .choice-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedPower = name;
+  checkReady();
+}
+
+function checkReady() {
+  document.getElementById('attack-btn').disabled = !(selectedEmotion && selectedPower);
+}
+
+// ===== АТАКА =====
+function attack() {
+  if (!selectedEmotion || !selectedPower) return;
+  
+  document.getElementById('modal').classList.remove('show');
+  
+  const correctPower = correctPairs[selectedEmotion];
+  const isCorrect = correctPower === selectedPower;
+  
+  // Создаём луч
+  createBeam(isCorrect);
+  
+  setTimeout(() => {
+    if (isCorrect) {
+      handleSuccess();
+    } else {
+      handleFailure();
+    }
+  }, 400);
+}
+
+function createBeam(isCorrect) {
+  const beam = document.createElement('div');
+  beam.className = 'beam';
+  
+  const emotion = emotions.find(e => e.name === selectedEmotion);
+  beam.style.color = emotion ? emotion.color : '#fff';
+  beam.style.left = '20%';
+  beam.style.top = '70%';
+  beam.style.transform = 'rotate(-30deg)';
+  
+  document.getElementById('game').appendChild(beam);
+  setTimeout(() => beam.remove(), 800);
+}
+
+function handleSuccess() {
+  // Удаляем снаряд
+  if (currentProjectile) {
+    currentProjectile.remove();
+    currentProjectile = null;
+  }
+  
+  // Добавляем эмоцию в использованные
+  usedEmotions.add(selectedEmotion);
+  score++;
+  document.getElementById('score').textContent = score;
+  
+  // Активируем сектор щита
+  const segmentIdx = emotions.findIndex(e => e.name === selectedEmotion);
+  const segment = document.querySelector(`.shield-segment[data-idx="${segmentIdx}"]`);
+  if (segment) segment.classList.add('active');
+  
+  // Уменьшаем туман
+  const fog = document.querySelector('.fog');
+  fog.style.opacity = 1 - (score / 6) * 0.8;
+  
+  showMessage(`✅ Отлично! ${selectedEmotion} — это ${selectedPower}!`, 'success', 2500);
+  
+  // Проверяем победу
+  if (score >= 6) {
+    setTimeout(showVictory, 1500);
+  }
+}
+
+function handleFailure() {
+  // Тряска экрана
+  document.body.classList.add('shake');
+  setTimeout(() => document.body.classList.remove('shake'), 500);
+  
+  // Откат щита (если есть что откатывать)
+  if (score > 0) {
+    score--;
+    document.getElementById('score').textContent = score;
+    // Деактивируем последний активный сектор
+    const segments = document.querySelectorAll('.shield-segment.active');
+    if (segments.length > 0) {
+      segments[segments.length - 1].classList.remove('active');
+    }
+  }
+  
+  showMessage(`❌ Неверно! "${selectedEmotion}" и "${selectedPower}" не пара. Попробуй ещё раз!`, 'error', 3000);
+  showHint('💡 Вспомни: у каждой эмоции своя суперсила. Подумай, какую "работу" выполняет эта эмоция!');
+  
+  // Возвращаем снаряд (удаляем замороженный, создаём новый)
+  if (currentProjectile) {
+    currentProjectile.remove();
+    currentProjectile = null;
+  }
+}
+
+// ===== КЛИК ПО ЛОРДУ =====
+function lordClick() {
+  if (!currentProjectile) {
+    showMessage(' Эй, герой! Сначала перехвати Снаряд Тумана!', 'error', 2500);
+    showHint('Лорд отмахивается: "Безразличие сильнее!"');
+  } else {
+    showMessage('🧙 Лорд отмахивается: "Попробуй сначала поймать мой снаряд!"', 'error', 2500);
+  }
+}
+
+// ===== СООБЩЕНИЯ =====
+function showMessage(text, type, duration) {
+  const msg = document.getElementById('message');
+  msg.textContent = text;
+  msg.className = 'show ' + type;
+  
+  setTimeout(() => {
+    msg.classList.remove('show');
+  }, duration);
+}
+
+function showHint(text) {
+  const hint = document.getElementById('hint');
+  hint.textContent = text;
+  hint.classList.add('show');
+  
+  setTimeout(() => {
+    hint.classList.remove('show');
+  }, 4000);
+}
+
+// ===== ПОБЕДА =====
+function showVictory() {
+  clearInterval(projectileInterval);
+  
+  const ach = achievements[Math.floor(Math.random() * achievements.length)];
+  document.getElementById('ach-icon').textContent = ach.icon;
+  document.getElementById('ach-title').textContent = ach.title;
+  document.getElementById('ach-text').textContent = ach.text;
+  
+  document.getElementById('victory').classList.add('show');
+}
+</script>
+
+</body>
+</html>
